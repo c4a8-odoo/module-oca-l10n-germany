@@ -9,6 +9,7 @@ class HrExpense(BaseCommon):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        cls.env.user.tz = "Europe/Berlin"
         cls.country = cls.env.ref("base.de")
         cls.product = cls.env.ref(
             "hr_expense_meal_allowance.product_meal_allowance"

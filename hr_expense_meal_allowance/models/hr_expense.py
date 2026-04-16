@@ -53,7 +53,7 @@ class HrExpense(models.Model):
     def _compute_currency_id(self):
         res = super()._compute_currency_id()
         for expense in self:
-            if expense.is_meal_allowance and expense.state in {"draft", "reported"}:
+            if expense.is_meal_allowance and expense.state in {"draft", "submitted"}:
                 expense.currency_id = (
                     expense.meal_allowance_rate_id.currency_id
                     or expense.company_currency_id
@@ -167,6 +167,20 @@ class HrExpense(models.Model):
             )
 
             record.meal_allowance_rate_id = rates[0] if rates else False
+
+    def action_post(self):
+        for expense in self.filtered(
+            lambda expense: expense.is_meal_allowance and not expense.nb_attachment
+        ):
+            lang = (
+                expense.employee_id.lang
+                or expense.employee_id.company_id.partner_id.lang
+            )
+            self.env["ir.actions.report"].with_context(lang=lang)._render_qweb_pdf(
+                "hr_expense_meal_allowance.action_report_hr_expense_meal_allowance",
+                expense.id,
+            )
+        return super().action_post()
 
     def action_print(self):
         self.ensure_one()

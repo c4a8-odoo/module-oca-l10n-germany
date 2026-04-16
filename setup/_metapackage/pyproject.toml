@@ -2,6 +2,7 @@
 name = "odoo-addons-oca-l10n-germany"
 version = "19.0.20260319.0"
 dependencies = [
+    "odoo-addon-hr_expense_meal_allowance==19.0.*",
     "odoo-addon-l10n_din5008_move_name==19.0.*",
 ]
 classifiers=[
