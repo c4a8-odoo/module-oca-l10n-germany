@@ -26,57 +26,9 @@
                                 <span t-field="o.name">Meal Allowance</span>
                             </t>
                             <div class="oe_structure" id="oe_structure_informations" />
-                            <div id="informations" class="row mb-4">
-                                <div
-                                    class="col"
-                                    t-if="o.employee_id"
-                                    name="employee_id"
-                                >
-                                    <strong>Employee</strong>
-                                    <div t-field="o.employee_id">Mitchell Admin</div>
-                                </div>
-                                <div class="col" t-if="o.customer_id" name="due_date">
-                                    <strong>Customer</strong>
-                                    <div t-field="o.customer_id">Azure Interior</div>
-                                </div>
-                                <div
-                                    class="col"
-                                    t-if="o.travel_begin"
-                                    name="travel_begin"
-                                >
-                                    <strong>Travel Begin</strong>
-                                    <div
-                                        class="m-0"
-                                        t-field="o.travel_begin"
-                                    >2025-01-03</div>
-                                </div>
-                                <div class="col" t-if="o.travel_end" name="travel_end">
-                                    <strong>Travel End</strong>
-                                    <div
-                                        class="m-0"
-                                        t-field="o.travel_end"
-                                    >2025-01-05</div>
-                                </div>
-                                <div
-                                    class="col"
-                                    t-if="o.number_of_travel_days"
-                                    name="number_of_travel_days"
-                                >
-                                    <strong>Travel Days</strong>
-                                    <div
-                                        class="m-0"
-                                        t-field="o.number_of_travel_days"
-                                    >2</div>
-                                </div>
-                                <div
-                                    class="col"
-                                    t-if="o.number_of_travel_days"
-                                    name="number_of_days"
-                                >
-                                    <strong>Whole Days</strong>
-                                    <div class="m-0" t-field="o.number_of_days">1</div>
-                                </div>
-                            </div>
+                            <t
+                                t-call="hr_expense_meal_allowance.report_expense_travel_information"
+                            />
                             <div
                                 class="oe_structure"
                                 id="oe_structure_expense_line_table"
@@ -186,5 +138,100 @@
                 </t>
             </t>
         </t>
+    </template>
+    <template id="report_expense_travel_information">
+        <div class="row o_header">
+            <div class="col" t-if="o.employee_id" name="employee_id">
+                <strong>Employee</strong>
+                <div t-field="o.employee_id">Mitchell Admin</div>
+            </div>
+            <div class="col" t-if="o.customer_id" name="due_date">
+                <strong>Customer</strong>
+                <div t-field="o.customer_id">Azure Interior</div>
+            </div>
+            <div class="col" t-if="o.travel_begin" name="travel_begin">
+                <strong>Travel Begin</strong>
+                <div class="m-0" t-field="o.travel_begin">2025-01-03</div>
+            </div>
+            <div class="col" t-if="o.travel_end" name="travel_end">
+                <strong>Travel End</strong>
+                <div class="m-0" t-field="o.travel_end">2025-01-05</div>
+            </div>
+            <div
+                class="col"
+                t-if="o.number_of_travel_days"
+                name="number_of_travel_days"
+            >
+                <strong>Travel Days</strong>
+                <div class="m-0" t-field="o.number_of_travel_days">2</div>
+            </div>
+            <div class="col" t-if="o.number_of_travel_days" name="number_of_days">
+                <strong>Whole Days</strong>
+                <div class="m-0" t-field="o.number_of_days">1</div>
+            </div>
+        </div>
+    </template>
+    <template
+        id="report_expense_inherit_din5008_document_information"
+        inherit_id="hr_expense.report_expense"
+    >
+        <xpath expr="//div[hasclass('page', 'o_content_pdf')]" position="before">
+            <div class="col-6">
+                <t t-set="din5008_document_information" />
+            </div>
+        </xpath>
+    </template>
+    <template
+        id="report_expense_inherit_travel_information"
+        inherit_id="hr_expense.report_expense"
+        priority="100"
+    >
+        <xpath expr="//div[hasclass('row', 'o_header')]" position="replace">
+            <t t-if="o.meal_allowance_ids">
+                <t
+                    t-call="hr_expense_meal_allowance.report_expense_travel_information"
+                />
+            </t>
+            <t t-else="">
+                <div class="row o_header">
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-3 fw-bold">
+                                <span>Employee:</span>
+                            </div>
+                            <div class="col-9 text-muted">
+                                <span t-field="o.employee_id.name">Marc Demo</span>
+                            </div>
+                        </div>
+                        <div class="row" t-if="o.date">
+                            <div class="col-3 fw-bold">
+                                <span>Date:</span>
+                            </div>
+                            <div class="col-9 text-muted">
+                                <span t-field="o.date">2023-08-11</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="row" t-if="o.manager_id.name">
+                            <div class="col-3 fw-bold">
+                                <span>Manager:</span>
+                            </div>
+                            <div class="col-9 text-muted">
+                                <span t-field="o.manager_id">Mitchell Admin</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3 fw-bold">
+                                <span>Paid by:</span>
+                            </div>
+                            <div class="col-9 text-muted">
+                                <span t-field="o.payment_mode">Credit Card</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </xpath>
     </template>
 </odoo>
