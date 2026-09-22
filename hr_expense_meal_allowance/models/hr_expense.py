@@ -2,6 +2,7 @@ from datetime import date, time, timedelta
 
 from odoo import Command, api, fields, models
 from odoo.exceptions import UserError, ValidationError
+from odoo.tools.safe_eval import safe_eval
 
 
 class HrExpense(models.Model):
@@ -242,8 +243,26 @@ class HrExpense(models.Model):
         # stale for the whole transaction) so a second invocation in the same
         # transaction cannot create a duplicate.
         attachment_model = self.env["ir.attachment"].sudo()
+        report = self.env.ref(
+            "hr_expense_meal_allowance.action_report_hr_expense_meal_allowance"
+        ).sudo()
         for expense in self.filtered("is_meal_allowance"):
-            attachment_name = f"{expense.name}.pdf".replace("/", "_")
+            if report.attachment:
+                # The report saves (and deduplicates) its own attachment
+                # during the render, see ir.actions.report._render_qweb_pdf.
+                report._render_qweb_pdf(report, expense.ids)
+                continue
+            if report.print_report_name:
+                attachment_name = safe_eval(
+                    report.print_report_name, {"object": expense, "time": time}
+                )
+            else:
+                attachment_name = expense.name.replace("/", "_")
+            # The report's name expression is not required to carry the
+            # extension, and without it the file is offered for download
+            # without one.
+            if not attachment_name.lower().endswith(".pdf"):
+                attachment_name = f"{attachment_name}.pdf"
             if attachment_model.search_count(
                 [
                     ("res_model", "=", "hr.expense"),
@@ -253,20 +272,7 @@ class HrExpense(models.Model):
                 limit=1,
             ):
                 continue
-            # report_pdf_no_attachment: if the report action has a
-            # "Save as Attachment Prefix" configured (e.g. set on the record
-            # in the database), _render_qweb_pdf would itself create an
-            # attachment during the render, duplicating the one created
-            # below. Suppress that; this method is the only writer.
-            pdf_content, _mime = (
-                self.env["ir.actions.report"]
-                .sudo()
-                .with_context(report_pdf_no_attachment=True)
-                ._render_qweb_pdf(
-                    "hr_expense_meal_allowance.action_report_hr_expense_meal_allowance",
-                    [expense.id],
-                )
-            )
+            pdf_content, _mime = report._render_qweb_pdf(report, expense.ids)
             attachment_model.create(
                 {
                     "name": attachment_name,
