@@ -1,10 +1,12 @@
 from unittest.mock import patch
 
 from odoo import Command
+from odoo.tests import tagged
 
 from odoo.addons.hr_expense.tests.common import TestExpenseCommon
 
 
+@tagged("post_install", "-at_install")
 class TestHrExpenseSheet(TestExpenseCommon):
     @classmethod
     def setUpClass(cls):
