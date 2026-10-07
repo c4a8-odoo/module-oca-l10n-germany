@@ -10,12 +10,14 @@ from .layout_din5008_mixin import (
     DIN5008_REMARK_ZONE_HEIGHT,
 )
 
+# Allowed values of the numeric settings (mm, the font scale is a factor)
 LAYOUT_DIN5008_RANGES = {
     "layout_din5008_address_offset_top": (-10, 30),
     "layout_din5008_address_height": (20, 80),
     "layout_din5008_info_left": (105, 160),
     "layout_din5008_info_width": (30, 90),
     "layout_din5008_remark_zone_height": (0, 20),
+    "layout_din5008_sender_font_factor": (0.5, 2.0),
 }
 
 
@@ -140,7 +142,7 @@ class ResCompany(models.Model):
                 if not low <= value <= high:
                     raise ValidationError(
                         self.env._(
-                            "%(field)s must be between %(low)s and %(high)s mm.",
+                            "%(field)s must be between %(low)s and %(high)s.",
                             field=company._fields[field_name]._description_string(
                                 self.env
                             ),
@@ -170,13 +172,3 @@ class ResCompany(models.Model):
             company.layout_din5008_sender_line_text = (
                 company._layout_din5008_format_sender_line()
             )
-
-    @api.constrains("layout_din5008_sender_font_factor")
-    def _check_layout_din5008_sender_font_factor(self):
-        for company in self:
-            if not 0.5 <= company.layout_din5008_sender_font_factor <= 2.0:
-                raise ValidationError(
-                    self.env._(
-                        "The sender line font scale must be between 0.5 and 2.0."
-                    )
-                )

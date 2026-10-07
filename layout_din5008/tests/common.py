@@ -1,6 +1,6 @@
 # Copyright 2026 glueckkanja AG
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
-import lxml.html
+from odoo.addons.l10n_de_report_footer.tests.common import ReportFooterCommon
 
 LOGO_PNG = (
     b"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGP4//8/AAX+Av4N70a4"
@@ -67,8 +67,11 @@ TEST_REPORT_ARCH = """
 """
 
 
-class LayoutDin5008Common:
-    """Mixin preparing a company using the DIN 5008 layout and a test report."""
+class LayoutDin5008Common(ReportFooterCommon):
+    """Mixin preparing a company using the DIN 5008 layout and a test report.
+
+    ``_render_html`` and ``_render_tree`` come from the base module.
+    """
 
     @classmethod
     def _setup_din5008(cls):
@@ -135,14 +138,3 @@ class LayoutDin5008Common:
         self.company.write(
             {"external_report_layout_id": layout.id, "paperformat_id": paperformat.id}
         )
-
-    def _render_html(self, data=None):
-        html = self.env["ir.actions.report"]._render_qweb_html(
-            self.report, self.partner.ids, data=data
-        )[0]
-        if isinstance(html, bytes):
-            html = html.decode("utf-8")
-        return str(html)
-
-    def _render_tree(self, data=None):
-        return lxml.html.fromstring(self._render_html(data=data))

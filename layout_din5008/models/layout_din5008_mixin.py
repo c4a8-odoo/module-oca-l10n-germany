@@ -18,9 +18,9 @@ DIN5008_HOLE_MARK = 148.5
 # Sender line (Rücksendeangabe): separators and base font size in pt
 DIN5008_SENDER_SEPARATORS = {"pipe": " | ", "bullet": " • ", "middot": " · "}
 DIN5008_SENDER_FONT_SIZE = 7
-# Address window: 20 mm from the left edge, 85 mm wide, 45 mm high.
+# Address window: 20 mm from the left edge, 45 mm high (the 85 mm width is
+# fixed in the stylesheet).
 DIN5008_ADDRESS_LEFT = 20
-DIN5008_ADDRESS_WIDTH = 85
 DIN5008_ADDRESS_HEIGHT = 45
 # Zones inside the address window: sender line (Rücksendeangabe) and
 # remark zone (Zusatz- und Vermerkzone) above the recipient address.
@@ -131,8 +131,6 @@ class LayoutDin5008Mixin(models.AbstractModel):
             f"width: {info_width}mm; }}\n"
         )
         return {
-            "form": form,
-            "header_height": spec["header_height"],
             "header": f"height: {spec['header_height']}mm;",
             "sender_line": (
                 f"top: {offset_top}mm; "

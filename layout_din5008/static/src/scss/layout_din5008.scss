@@ -222,6 +222,7 @@ $din5008-letterhead-logo-width: 70mm; // space reserved for the logo in the lett
 }
 
 // Preview highlight while a geometry field of the wizard is focused
+// (mixin of l10n_de_report_footer, same asset bundle)
 html[data-report-preview-highlight="address"] .o_layout_din5008 .address.row,
 html[data-report-preview-highlight="address"] .o_layout_din5008 .din5008_sender_line,
 html[data-report-preview-highlight="information_block"]
@@ -232,9 +233,7 @@ html[data-report-preview-highlight="information_block"]
     .o_layout_din5008
     .address.row
     > .din5008_informations {
-    outline: 2px dashed #e46e78;
-    outline-offset: 2px;
-    background-color: rgba(228, 110, 120, 0.08);
+    @include o-report-preview-highlight;
 }
 
 // Fold and hole marks only make sense on paper

@@ -18,7 +18,7 @@ msgstr ""
 #. module: layout_din5008
 #. odoo-python
 #: code:addons/layout_din5008/models/res_company.py:0
-msgid "%(field)s must be between %(low)s and %(high)s mm."
+msgid "%(field)s must be between %(low)s and %(high)s."
 msgstr ""
 
 #. module: layout_din5008
@@ -351,12 +351,6 @@ msgstr ""
 #. module: layout_din5008
 #: model_terms:ir.ui.view,arch_db:layout_din5008.view_base_document_layout
 msgid "Separator"
-msgstr ""
-
-#. module: layout_din5008
-#. odoo-python
-#: code:addons/layout_din5008/models/res_company.py:0
-msgid "The sender line font scale must be between 0.5 and 2.0."
 msgstr ""
 
 #. module: layout_din5008

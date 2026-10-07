@@ -150,10 +150,6 @@ class ResCompany(models.Model):
         )
         return Markup(rendered.get(company.id) or "")
 
-    @api.model
-    def _render_report_footer_template(self, template, company):
-        return self._render_company_placeholders(template, company)
-
     def _render_report_footer(self):
         """Footer text of the company with rendered placeholders."""
         self.ensure_one()
