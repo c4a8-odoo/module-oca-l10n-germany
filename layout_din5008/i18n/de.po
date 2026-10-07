@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-23 20:05+0000\n"
-"PO-Revision-Date: 2026-09-23 20:05+0000\n"
+"POT-Creation-Date: 2026-10-07 21:57+0000\n"
+"PO-Revision-Date: 2026-10-07 21:57+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -24,33 +24,13 @@ msgstr "%(field)s muss zwischen %(low)s und %(high)s mm liegen."
 
 #. module: layout_din5008
 #: model_terms:ir.ui.view,arch_db:layout_din5008.view_base_document_layout
-msgid "<span class=\"text-muted\">Height</span>"
-msgstr "<span class=\"text-muted\">Höhe</span>"
+msgid "Address Window Height"
+msgstr "Höhe des Anschriftfelds"
 
 #. module: layout_din5008
 #: model_terms:ir.ui.view,arch_db:layout_din5008.view_base_document_layout
-msgid "<span class=\"text-muted\">Left</span>"
-msgstr "<span class=\"text-muted\">Links</span>"
-
-#. module: layout_din5008
-#: model_terms:ir.ui.view,arch_db:layout_din5008.view_base_document_layout
-msgid "<span class=\"text-muted\">Offset</span>"
-msgstr "<span class=\"text-muted\">Versatz</span>"
-
-#. module: layout_din5008
-#: model_terms:ir.ui.view,arch_db:layout_din5008.view_base_document_layout
-msgid "<span class=\"text-muted\">Remark zone</span>"
-msgstr "<span class=\"text-muted\">Vermerkzone</span>"
-
-#. module: layout_din5008
-#: model_terms:ir.ui.view,arch_db:layout_din5008.view_base_document_layout
-msgid "<span class=\"text-muted\">Width</span>"
-msgstr "<span class=\"text-muted\">Breite</span>"
-
-#. module: layout_din5008
-#: model_terms:ir.ui.view,arch_db:layout_din5008.view_base_document_layout
-msgid "Address Window (mm)"
-msgstr "Anschriftfeld (mm)"
+msgid "Address Window Offset"
+msgstr "Versatz des Anschriftfelds"
 
 #. module: layout_din5008
 #: model:ir.model.fields.selection,name:layout_din5008.selection__res_company__layout_din5008_informations_position__below
@@ -63,15 +43,23 @@ msgid "Beside the address (DIN 5008 information block)"
 msgstr "Neben der Anschrift (DIN 5008 Informationsblock)"
 
 #. module: layout_din5008
-#: model_terms:ir.ui.view,arch_db:layout_din5008.view_base_document_layout
-msgid "Bottom Margin (mm)"
-msgstr "Unterer Rand (mm)"
+#: model:ir.model.fields.selection,name:layout_din5008.selection__res_company__layout_din5008_sender_separator__bullet
+msgid "Bullet (•)"
+msgstr "Aufzählungspunkt (•)"
 
 #. module: layout_din5008
-#: model:ir.model.fields,help:layout_din5008.field_base_document_layout__layout_din5008_margin_bottom
-#: model:ir.model.fields,help:layout_din5008.field_res_company__layout_din5008_margin_bottom
-msgid "Bottom page margin reserved for the footer of DIN 5008 reports."
-msgstr "Unterer Seitenrand, der für die Fußzeile der DIN-5008-Berichte reserviert ist."
+#: model:ir.model.fields,help:layout_din5008.field_base_document_layout__layout_din5008_sender_separator
+#: model:ir.model.fields,help:layout_din5008.field_res_company__layout_din5008_sender_separator
+msgid ""
+"Character between the lines of the address printed as sender line above the "
+"recipient. The company name and address formatted this way are available as "
+"the placeholder 'DIN 5008 Sender Line Text' in the address, tagline and "
+"footer texts of the document layout."
+msgstr ""
+"Zeichen zwischen den Zeilen der Adresse, die als Rücksendeangabe über dem "
+"Empfänger gedruckt wird. Name und Adresse des Unternehmens in diesem Format "
+"sind als Platzhalter „DIN 5008 Text der Rücksendeangabe“ in Adresse, Slogan "
+"und Fußzeile des Dokumentlayouts verfügbar."
 
 #. module: layout_din5008
 #: model:ir.model,name:layout_din5008.model_res_company
@@ -82,6 +70,21 @@ msgstr "Unternehmen"
 #: model:ir.model,name:layout_din5008.model_base_document_layout
 msgid "Company Document Layout"
 msgstr "Dokumentlayout des Unternehmens"
+
+#. module: layout_din5008
+#: model_terms:ir.ui.view,arch_db:layout_din5008.view_base_document_layout
+msgid "Country"
+msgstr "Land"
+
+#. module: layout_din5008
+#: model:ir.model.fields.selection,name:layout_din5008.selection__res_company__layout_din5008_sender_country__code
+msgid "Country code before the postal code"
+msgstr "Länderkennzeichen vor der Postleitzahl"
+
+#. module: layout_din5008
+#: model:ir.model.fields.selection,name:layout_din5008.selection__res_company__layout_din5008_sender_country__name
+msgid "Country name"
+msgstr "Ländername"
 
 #. module: layout_din5008
 #: model:ir.model.fields,field_description:layout_din5008.field_base_document_layout__layout_din5008_address_height
@@ -96,10 +99,9 @@ msgid "DIN 5008 Address Window Offset (mm)"
 msgstr "DIN 5008 Versatz des Anschriftfelds (mm)"
 
 #. module: layout_din5008
-#: model:ir.model.fields,field_description:layout_din5008.field_base_document_layout__layout_din5008_margin_bottom
-#: model:ir.model.fields,field_description:layout_din5008.field_res_company__layout_din5008_margin_bottom
-msgid "DIN 5008 Bottom Margin (mm)"
-msgstr "DIN 5008 Unterer Rand (mm)"
+#: model_terms:ir.ui.view,arch_db:layout_din5008.view_base_document_layout
+msgid "DIN 5008 Document"
+msgstr "DIN 5008 Dokument"
 
 #. module: layout_din5008
 #: model:ir.model.fields,field_description:layout_din5008.field_base_document_layout__layout_din5008_informations_position
@@ -110,8 +112,14 @@ msgstr "DIN 5008 Dokumentinformationen"
 #. module: layout_din5008
 #: model:ir.model.fields,field_description:layout_din5008.field_base_document_layout__layout_din5008_fold_marks
 #: model:ir.model.fields,field_description:layout_din5008.field_res_company__layout_din5008_fold_marks
-msgid "DIN 5008 Fold and Hole Marks"
-msgstr "DIN 5008 Falz- und Lochmarken"
+msgid "DIN 5008 Fold Marks"
+msgstr "DIN 5008 Falzmarken"
+
+#. module: layout_din5008
+#: model:ir.model.fields,field_description:layout_din5008.field_base_document_layout__layout_din5008_hole_mark
+#: model:ir.model.fields,field_description:layout_din5008.field_res_company__layout_din5008_hole_mark
+msgid "DIN 5008 Hole Mark"
+msgstr "DIN 5008 Lochmarke"
 
 #. module: layout_din5008
 #: model:ir.model.fields,field_description:layout_din5008.field_base_document_layout__layout_din5008_info_left
@@ -149,8 +157,30 @@ msgid "DIN 5008 Sender Line"
 msgstr "DIN 5008 Rücksendeangabe"
 
 #. module: layout_din5008
+#: model:ir.model.fields,field_description:layout_din5008.field_base_document_layout__layout_din5008_sender_country
+#: model:ir.model.fields,field_description:layout_din5008.field_res_company__layout_din5008_sender_country
+msgid "DIN 5008 Sender Line Country"
+msgstr "DIN 5008 Land in der Rücksendeangabe"
+
+#. module: layout_din5008
+#: model:ir.model.fields,field_description:layout_din5008.field_base_document_layout__layout_din5008_sender_font_factor
+#: model:ir.model.fields,field_description:layout_din5008.field_res_company__layout_din5008_sender_font_factor
+msgid "DIN 5008 Sender Line Font Scale"
+msgstr "DIN 5008 Schriftgröße der Rücksendeangabe"
+
+#. module: layout_din5008
+#: model:ir.model.fields,field_description:layout_din5008.field_base_document_layout__layout_din5008_sender_separator
+#: model:ir.model.fields,field_description:layout_din5008.field_res_company__layout_din5008_sender_separator
+msgid "DIN 5008 Sender Line Separator"
+msgstr "DIN 5008 Trennzeichen der Rücksendeangabe"
+
+#. module: layout_din5008
+#: model:ir.model.fields,field_description:layout_din5008.field_res_company__layout_din5008_sender_line_text
+msgid "DIN 5008 Sender Line Text"
+msgstr "DIN 5008 Text der Rücksendeangabe"
+
+#. module: layout_din5008
 #: model:ir.model.fields,field_description:layout_din5008.field_base_document_layout__display_name
-#: model:ir.model.fields,field_description:layout_din5008.field_ir_actions_report__display_name
 #: model:ir.model.fields,field_description:layout_din5008.field_layout_din5008_mixin__display_name
 #: model:ir.model.fields,field_description:layout_din5008.field_res_company__display_name
 msgid "Display Name"
@@ -173,22 +203,26 @@ msgid "Fold Marks"
 msgstr "Falzmarken"
 
 #. module: layout_din5008
-#: model:ir.model.fields,field_description:layout_din5008.field_base_document_layout__id
-#: model:ir.model.fields,field_description:layout_din5008.field_ir_actions_report__id
-#: model:ir.model.fields,field_description:layout_din5008.field_layout_din5008_mixin__id
-#: model:ir.model.fields,field_description:layout_din5008.field_res_company__id
-msgid "ID"
-msgstr "ID"
+#: model_terms:ir.ui.view,arch_db:layout_din5008.view_base_document_layout
+msgid "Font Scale"
+msgstr "Schriftgröße"
+
+#. module: layout_din5008
+#: model:ir.model.fields,help:layout_din5008.field_base_document_layout__layout_din5008_remark_zone_height
+#: model:ir.model.fields,help:layout_din5008.field_res_company__layout_din5008_remark_zone_height
+msgid ""
+"Height of the remark zone (Zusatz- und Vermerkzone) between the sender line "
+"and the recipient address. DIN 5008 reserves 12.7 mm; 0 places the recipient"
+" address directly below the sender line."
+msgstr ""
+"Höhe der Zusatz- und Vermerkzone zwischen Rücksendeangabe und "
+"Empfängeranschrift. DIN 5008 sieht 12,7 mm vor; 0 setzt die "
+"Empfängeranschrift direkt unter die Rücksendeangabe."
 
 #. module: layout_din5008
 #: model_terms:ir.ui.view,arch_db:layout_din5008.view_base_document_layout
-msgid "Information Block (mm)"
-msgstr "Informationsblock (mm)"
-
-#. module: layout_din5008
-#: model:ir.model.fields,field_description:layout_din5008.field_base_document_layout__layout_din5008_is_din
-msgid "Is DIN 5008 Layout"
-msgstr "Ist DIN-5008-Layout"
+msgid "Hole Mark"
+msgstr "Lochmarke"
 
 #. module: layout_din5008
 #: model:ir.model.fields,help:layout_din5008.field_base_document_layout__layout_din5008_logo_position
@@ -201,6 +235,40 @@ msgstr ""
 "der gegenüberliegenden Seite gedruckt."
 
 #. module: layout_din5008
+#: model:ir.model.fields,help:layout_din5008.field_base_document_layout__layout_din5008_sender_country
+#: model:ir.model.fields,help:layout_din5008.field_res_company__layout_din5008_sender_country
+msgid ""
+"How the country of the company is printed in the placeholder 'DIN 5008 "
+"Sender Line Text' (insert it into the address of the document layout to "
+"print it as sender line)."
+msgstr ""
+"Wie das Land des Unternehmens im Platzhalter „DIN 5008 Text der "
+"Rücksendeangabe“ gedruckt wird (in die Adresse des Dokumentlayouts eingefügt "
+"wird er als Rücksendeangabe gedruckt)."
+
+#. module: layout_din5008
+#: model:ir.model.fields,field_description:layout_din5008.field_base_document_layout__id
+#: model:ir.model.fields,field_description:layout_din5008.field_layout_din5008_mixin__id
+#: model:ir.model.fields,field_description:layout_din5008.field_res_company__id
+msgid "ID"
+msgstr "ID"
+
+#. module: layout_din5008
+#: model_terms:ir.ui.view,arch_db:layout_din5008.view_base_document_layout
+msgid "Information Block Left"
+msgstr "Informationsblock links"
+
+#. module: layout_din5008
+#: model_terms:ir.ui.view,arch_db:layout_din5008.view_base_document_layout
+msgid "Information Block Width"
+msgstr "Breite des Informationsblocks"
+
+#. module: layout_din5008
+#: model:ir.model.fields,field_description:layout_din5008.field_base_document_layout__layout_din5008_is_din
+msgid "Is DIN 5008 Layout"
+msgstr "Ist DIN-5008-Layout"
+
+#. module: layout_din5008
 #: model:ir.model.fields.selection,name:layout_din5008.selection__res_company__layout_din5008_logo_position__left
 msgid "Left"
 msgstr "Links"
@@ -209,6 +277,11 @@ msgstr "Links"
 #: model_terms:ir.ui.view,arch_db:layout_din5008.view_base_document_layout
 msgid "Logo Position"
 msgstr "Logoposition"
+
+#. module: layout_din5008
+#: model:ir.model.fields.selection,name:layout_din5008.selection__res_company__layout_din5008_sender_separator__middot
+msgid "Middle dot (·)"
+msgstr "Mittelpunkt (·)"
 
 #. module: layout_din5008
 #: model:ir.model.fields,help:layout_din5008.field_base_document_layout__layout_din5008_address_height
@@ -221,10 +294,37 @@ msgstr ""
 "unterhalb dieser Zeile."
 
 #. module: layout_din5008
-#: model:ir.model.fields,help:layout_din5008.field_base_document_layout__layout_din5008_fold_marks
-#: model:ir.model.fields,help:layout_din5008.field_res_company__layout_din5008_fold_marks
-msgid "Print fold marks and the hole mark on the left edge of every page."
-msgstr "Falzmarken und Lochmarke am linken Rand jeder Seite drucken."
+#: model:ir.model.fields,help:layout_din5008.field_res_company__layout_din5008_sender_line_text
+msgid ""
+"Name and address of the company formatted as a single line with the "
+"configured separator and country indicator. Available as placeholder in the "
+"address, tagline and footer texts of the document layout; insert it into the"
+" address to print it as sender line."
+msgstr ""
+"Name und Adresse des Unternehmens als eine Zeile mit dem gewählten "
+"Trennzeichen und Länderkennzeichen. Als Platzhalter in Adresse, Slogan und "
+"Fußzeile des Dokumentlayouts verfügbar; in die Adresse eingefügt wird er als "
+"Rücksendeangabe gedruckt."
+
+#. module: layout_din5008
+#: model:ir.model.fields.selection,name:layout_din5008.selection__res_company__layout_din5008_sender_country__none
+msgid "No country"
+msgstr "Kein Land"
+
+#. module: layout_din5008
+#: model:ir.model.fields.selection,name:layout_din5008.selection__res_company__layout_din5008_sender_separator__pipe
+msgid "Pipe (|)"
+msgstr "Senkrechter Strich (|)"
+
+#. module: layout_din5008
+#: model_terms:ir.ui.view,arch_db:layout_din5008.view_base_document_layout
+msgid "Positions (mm)"
+msgstr "Positionen (mm)"
+
+#. module: layout_din5008
+#: model_terms:ir.ui.view,arch_db:layout_din5008.view_base_document_layout
+msgid "Print Sender Line"
+msgstr "Rücksendeangabe drucken"
 
 #. module: layout_din5008
 #: model:ir.model.fields,help:layout_din5008.field_base_document_layout__layout_din5008_sender_line
@@ -237,16 +337,21 @@ msgstr ""
 "(Rücksendeangabe), sichtbar im Fenster des Briefumschlags."
 
 #. module: layout_din5008
-#: model:ir.model.fields,help:layout_din5008.field_base_document_layout__layout_din5008_remark_zone_height
-#: model:ir.model.fields,help:layout_din5008.field_res_company__layout_din5008_remark_zone_height
-msgid ""
-"Height of the remark zone (Zusatz- und Vermerkzone) between the sender line "
-"and the recipient address. DIN 5008 reserves 12.7 mm; 0 places the recipient "
-"address directly below the sender line."
-msgstr ""
-"Höhe der Zusatz- und Vermerkzone zwischen Rücksendeangabe und "
-"Empfängeranschrift. DIN 5008 sieht 12,7 mm vor; 0 setzt die "
-"Empfängeranschrift direkt unter die Rücksendeangabe."
+#: model:ir.model.fields,help:layout_din5008.field_base_document_layout__layout_din5008_fold_marks
+#: model:ir.model.fields,help:layout_din5008.field_res_company__layout_din5008_fold_marks
+msgid "Print the fold marks on the left edge of every page."
+msgstr "Falzmarken am linken Rand jeder Seite drucken."
+
+#. module: layout_din5008
+#: model:ir.model.fields,help:layout_din5008.field_base_document_layout__layout_din5008_hole_mark
+#: model:ir.model.fields,help:layout_din5008.field_res_company__layout_din5008_hole_mark
+msgid "Print the hole mark on the left edge of every page."
+msgstr "Lochmarke am linken Rand jeder Seite drucken."
+
+#. module: layout_din5008
+#: model_terms:ir.ui.view,arch_db:layout_din5008.view_base_document_layout
+msgid "Remark Zone Height"
+msgstr "Höhe der Vermerkzone"
 
 #. module: layout_din5008
 #: model:ir.model.fields.selection,name:layout_din5008.selection__res_company__layout_din5008_logo_position__right
@@ -254,14 +359,26 @@ msgid "Right"
 msgstr "Rechts"
 
 #. module: layout_din5008
-#: model:ir.model,name:layout_din5008.model_ir_actions_report
-msgid "Report Action"
-msgstr "Berichtsaktion"
+#: model:ir.model.fields,help:layout_din5008.field_base_document_layout__layout_din5008_sender_font_factor
+#: model:ir.model.fields,help:layout_din5008.field_res_company__layout_din5008_sender_font_factor
+msgid "Scale factor of the sender line font size (1.0 = 7 pt)."
+msgstr "Skalierungsfaktor der Schriftgröße der Rücksendeangabe (1,0 = 7 pt)."
 
 #. module: layout_din5008
 #: model_terms:ir.ui.view,arch_db:layout_din5008.view_base_document_layout
 msgid "Sender Line"
 msgstr "Rücksendeangabe"
+
+#. module: layout_din5008
+#: model_terms:ir.ui.view,arch_db:layout_din5008.view_base_document_layout
+msgid "Separator"
+msgstr "Trennzeichen"
+
+#. module: layout_din5008
+#. odoo-python
+#: code:addons/layout_din5008/models/res_company.py:0
+msgid "The sender line font scale must be between 0.5 and 2.0."
+msgstr "Die Skalierung der Rücksendeangabe muss zwischen 0,5 und 2,0 liegen."
 
 #. module: layout_din5008
 #: model:ir.model.fields,help:layout_din5008.field_base_document_layout__layout_din5008_address_offset_top
@@ -282,5 +399,5 @@ msgid ""
 " window after rendering."
 msgstr ""
 "Wo die Dokumentinformationen (Daten, Referenzen, ...) der Standardberichte "
-"gedruckt werden. „Neben der Anschrift“ verschiebt den Block nach dem "
-"Rendern neben das Anschriftfeld."
+"gedruckt werden. „Neben der Anschrift“ verschiebt den Block nach dem Rendern "
+"neben das Anschriftfeld."

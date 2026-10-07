@@ -37,13 +37,24 @@ class TestHtmlLayout(LayoutDin5008Common, TransactionCase):
         self.assertEqual(header.get("data-din5008-form"), "A")
         self.assertEqual(header.get("data-din5008-logo"), "left")
         self.assertEqual(article.get("data-din5008-informations"), "below")
-        self.assertIsNone(article.get("data-din5008-margin-bottom"))
 
-        # company address block is moved from the header into the footer
-        self.assertFalse(header.xpath(".//div[@name='company_address']"))
-        company_address = self._one(footer, ".//div[@name='company_address']")
-        self.assertIn("Acme GmbH", company_address.text_content())
-        self.assertIn("Tel. +49 30 123456", footer.text_content())
+        # the address is printed as sender line only; VAT and footer lines
+        # are moved into the footer
+        self.assertFalse(tree.xpath("//div[@name='company_address']"))
+        legal = self._one(footer, ".//ul[@name='din5008_footer_legal']")
+        self.assertIn("DE123456789", legal.text_content())
+        self.assertNotIn("DE123456789", header.text_content())
+        # footer text as a full width block after the company / page number row
+        footer_text = self._one(
+            footer, ".//div[contains(@class, 'din5008_footer_text')]"
+        )
+        self.assertIn("Tel. +49 30 123456", footer_text.text_content())
+        content = self._one(footer, ".//div[contains(@class, 'o_footer_content')]")
+        self.assertIs(content.getnext(), footer_text)
+        self.assertIsNone(footer.get("style"))
+        self.assertFalse(
+            content.xpath(".//div[contains(@class, 'din5008_footer_text')]")
+        )
 
         # fold marks: two fold marks and one hole mark in the header
         marks = header.xpath(".//div[contains(@class, 'din5008_fold_mark')]")
@@ -53,8 +64,8 @@ class TestHtmlLayout(LayoutDin5008Common, TransactionCase):
 
         # sender line above the address window
         sender = self._one(article, ".//div[@class='din5008_sender_line']")
-        self.assertEqual(sender.text, "Acme GmbH · Musterstraße 1 · 12345 Berlin")
-        self.assertEqual(sender.get("style"), "top: 0mm;")
+        self.assertEqual(sender.text, "Acme GmbH | Musterstraße 1 | 12345 Berlin")
+        self.assertEqual(sender.get("style"), "top: 0mm; font-size: 7pt;")
 
         # standard address row with the information block after the address
         row = self._one(article, ADDRESS_ROW)
@@ -125,11 +136,41 @@ class TestHtmlLayout(LayoutDin5008Common, TransactionCase):
 
     def test_options_disabled(self):
         self.company.write(
-            {"layout_din5008_sender_line": False, "layout_din5008_fold_marks": False}
+            {
+                "layout_din5008_sender_line": False,
+                "layout_din5008_fold_marks": False,
+                "layout_din5008_hole_mark": False,
+            }
         )
         tree = self._render_tree()
         self.assertFalse(tree.xpath("//div[@class='din5008_sender_line']"))
         self.assertFalse(tree.xpath("//div[contains(@class, 'din5008_mark')]"))
+        # fold marks and hole mark are switched separately
+        self.company.layout_din5008_hole_mark = True
+        tree = self._render_tree()
+        self.assertFalse(tree.xpath("//div[contains(@class, 'din5008_fold_mark')]"))
+        self.assertTrue(tree.xpath("//div[contains(@class, 'din5008_hole_mark')]"))
+
+    def test_sender_line_options(self):
+        self.company.write(
+            {
+                "layout_din5008_sender_separator": "middot",
+                "layout_din5008_sender_country": "code",
+                "layout_din5008_sender_font_factor": 1.2,
+            }
+        )
+        tree = self._render_tree()
+        sender = self._one(tree, "//div[@class='din5008_sender_line']")
+        # the address text is printed as sender line, joined by the separator
+        self.assertEqual(sender.text, "Acme GmbH · Musterstraße 1 · 12345 Berlin")
+        self.assertEqual(sender.get("style"), "top: 0mm; font-size: 8.4pt;")
+        # the formatted placeholder in the address applies the country option
+        self.company.company_details = (
+            '<p><t t-out="object.layout_din5008_sender_line_text"/></p>'
+        )
+        tree = self._render_tree()
+        sender = self._one(tree, "//div[@class='din5008_sender_line']")
+        self.assertEqual(sender.text, "Acme GmbH · Musterstraße 1 · DE-12345 Berlin")
 
     def test_custom_geometry(self):
         self.company.write(
@@ -148,7 +189,7 @@ class TestHtmlLayout(LayoutDin5008Common, TransactionCase):
         self.assertIn("padding-top: 13mm", style)
         self.assertIn("margin-left: 100mm; width: 80mm", style)
         sender = self._one(article, ".//div[@class='din5008_sender_line']")
-        self.assertEqual(sender.get("style"), "top: 3mm;")
+        self.assertEqual(sender.get("style"), "top: 3mm; font-size: 7pt;")
 
     def test_extension_of_standard_layout_applies(self):
         """Extensions of web.external_layout_standard apply to the DIN layout."""
@@ -159,33 +200,35 @@ class TestHtmlLayout(LayoutDin5008Common, TransactionCase):
                 "inherit_id": self.env.ref("web.external_layout_standard").id,
                 "mode": "extension",
                 "arch": """
-                    <xpath expr="//ul[@name='company_address_list']" position="inside">
-                        <li class="din5008_test_extension">EXTENSION</li>
+                    <xpath expr="//img[hasclass('o_company_logo_small')]"
+                           position="after">
+                        <span class="din5008_test_extension">EXTENSION</span>
+                    </xpath>
+                """,
+            }
+        )
+        tree = self._render_tree()
+        header = self._one(tree, HEADER)
+        extension = self._one(header, ".//span[@class='din5008_test_extension']")
+        self.assertEqual(extension.text, "EXTENSION")
+        # footer lines of the base module are printed in the footer
+        lines = self.env["ir.ui.view"].create(
+            {
+                "name": "layout_din5008.test_footer_lines",
+                "type": "qweb",
+                "inherit_id": self.env.ref("l10n_de_report_footer.footer_lines").id,
+                "mode": "extension",
+                "arch": """
+                    <xpath expr="//t[@name='l10n_de_report_footer_lines']"
+                           position="inside">
+                        <li class="din5008_test_line">HRB 1</li>
                     </xpath>
                 """,
             }
         )
         tree = self._render_tree()
         footer = self._one(tree, FOOTER)
-        extension = self._one(footer, ".//li[@class='din5008_test_extension']")
-        self.assertEqual(extension.text, "EXTENSION")
-
-    def test_prepare_html_margin_bottom(self):
-        html = self._render_html(data={"report_type": "pdf"})
-        self.assertIn('data-din5008-margin-bottom="25"', html)
-        args = self.report._prepare_html(html, report_model="res.partner")[4]
-        self.assertEqual(args.get("data-report-margin-bottom"), "25")
-
-        self.company.layout_din5008_margin_bottom = 40
-        html = self._render_html(data={"report_type": "pdf"})
-        args = self.report._prepare_html(html, report_model="res.partner")[4]
-        self.assertEqual(args.get("data-report-margin-bottom"), "40")
-
-        # an explicit value on the root tag keeps precedence
-        html = html.replace("<html", '<html data-report-margin-bottom="12"', 1)
-        args = self.report._prepare_html(html, report_model="res.partner")[4]
-        self.assertEqual(args.get("data-report-margin-bottom"), "12")
-
-        # html rendering does not carry the attribute
-        html = self._render_html()
-        self.assertNotIn("data-din5008-margin-bottom", html)
+        self._one(
+            footer, ".//ul[@name='din5008_footer_legal']/li[@class='din5008_test_line']"
+        )
+        lines.unlink()

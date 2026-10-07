@@ -12,6 +12,7 @@ $din5008-sender-height: 5mm;
 $din5008-recipient-height: 27.3mm;
 $din5008-info-top: 5mm;
 $din5008-text-start: 8.46mm; // two blank lines below the address window
+$din5008-letterhead-logo-width: 70mm; // space reserved for the logo in the letterhead
 
 .o_layout_din5008 {
     &.header {
@@ -20,7 +21,11 @@ $din5008-text-start: 8.46mm; // two blank lines below the address window
         padding: 4mm $din5008-text-right 0 $din5008-text-left;
         // height is set inline (letterhead height of the form)
 
+        // logo on one side, tagline on the other side
         .o_company_logo_small {
+            position: absolute;
+            top: 4mm;
+            left: $din5008-text-left;
             max-height: 15mm;
             max-width: 60mm;
         }
@@ -29,30 +34,28 @@ $din5008-text-start: 8.46mm; // two blank lines below the address window
             max-height: 30mm;
         }
 
-        // Logo on the right, tagline on the left (floats: wkhtmltopdf ignores
-        // flex-direction on the Bootstrap flex container)
-        &[data-din5008-logo="right"] > .d-flex {
+        > .d-flex,
+        > .row {
             display: block !important;
-
-            &::after {
-                content: "";
-                display: block;
-                clear: both;
-            }
-
-            .o_company_logo_small {
-                float: right;
-            }
-
-            .o_company_tagline {
-                float: left;
-                text-align: left;
-            }
+            margin: 0 0 0 $din5008-letterhead-logo-width;
+            text-align: right;
         }
 
-        // The company address block is moved into the footer, the row stays empty.
-        > .row {
-            display: none;
+        > .d-flex .o_company_tagline {
+            max-width: none;
+        }
+
+        &[data-din5008-logo="right"] {
+            .o_company_logo_small {
+                left: auto;
+                right: $din5008-text-right;
+            }
+
+            > .d-flex,
+            > .row {
+                margin: 0 $din5008-letterhead-logo-width 0 0;
+                text-align: left;
+            }
         }
     }
 
@@ -185,22 +188,53 @@ $din5008-text-start: 8.46mm; // two blank lines below the address window
 
     &.footer {
         box-sizing: border-box;
-        padding: 3mm $din5008-text-right 0 $din5008-text-left;
+        padding: 2mm $din5008-text-right 0 $din5008-text-left;
         font-size: 7pt;
         line-height: 1.3;
 
-        .o_footer_content > div[name="company_address"] {
+        // no separator line above the footer, no extra spacing
+        .o_footer_content {
+            border-top: 0 !important;
+            padding-top: 0 !important;
+        }
+
+        // VAT number and footer lines moved from the company address block
+        .o_footer_content > .din5008_footer_legal {
             flex: 1 1 0;
-            width: auto;
-            max-width: none;
             margin: 0 4mm 0 0;
             padding: 0;
 
-            ul {
+            li,
+            p {
+                margin: 0;
+            }
+        }
+
+        // footer text printed as a full width block below the company block
+        > .din5008_footer_text {
+            margin: 1.5mm 0 0 0;
+
+            p:last-child {
                 margin-bottom: 0;
             }
         }
     }
+}
+
+// Preview highlight while a geometry field of the wizard is focused
+html[data-report-preview-highlight="address"] .o_layout_din5008 .address.row,
+html[data-report-preview-highlight="address"] .o_layout_din5008 .din5008_sender_line,
+html[data-report-preview-highlight="information_block"]
+    .o_layout_din5008
+    .address.row
+    > div[name="information_block"],
+html[data-report-preview-highlight="information_block"]
+    .o_layout_din5008
+    .address.row
+    > .din5008_informations {
+    outline: 2px dashed #e46e78;
+    outline-offset: 2px;
+    background-color: rgba(228, 110, 120, 0.08);
 }
 
 // Fold and hole marks only make sense on paper
@@ -209,8 +243,14 @@ $din5008-text-start: 8.46mm; // two blank lines below the address window
 }
 
 // HTML report view and document layout wizard preview
-.o_body_html .o_layout_din5008 {
-    &.article {
-        max-width: 100%;
-    }
+// Document layout preview: the preview iframe is an A4 shaped canvas of
+// 1040px (web/.../iframe_wrapper_field.scss) with the report
+// body padding on both sides. The layout is a fixed 210 mm page, so it is
+// scaled to the preview width like the percentage based standard layouts.
+// The PDF body (.o_body_pdf) is not affected.
+// scale = (1040px - 2 * 11mm) / 210mm with 1mm = 3.7795px
+$din5008-preview-scale: 1.2056;
+
+.o_body_html.container-fluid .o_layout_din5008 {
+    zoom: $din5008-preview-scale;
 }

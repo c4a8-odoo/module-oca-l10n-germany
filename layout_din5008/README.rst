@@ -48,6 +48,14 @@ Both DIN 5008 forms are available in the document layout configurator:
 -  **Form A**: letterhead of 27 mm, address window starting at 27 mm.
 -  **Form B**: letterhead of 45 mm, address window starting at 45 mm.
 
+The letterhead prints the logo on one side and the tagline on the other
+side. The address text of the document layout is printed as the sender
+line above the recipient address instead of as an address block. The
+footer prints the tax ID with the shared footer lines of
+``l10n_de_report_footer`` (for example the company representatives) and
+the page numbers in a first row, followed by the footer text with
+rendered company placeholders across the full width.
+
 The layout places the sender line, the address window (20 mm from the
 left edge, 85 mm x 45 mm), the information block (125 mm from the left
 edge, 75 mm wide), the document title (two lines below the address
@@ -79,10 +87,17 @@ The following settings appear once a DIN 5008 layout is selected:
    position do not apply.
 -  **Logo Position**: print the company logo on the left or on the right
    of the letterhead; the tagline is printed on the opposite side.
--  **Sender Line**: print the company address as a single line above the
-   recipient address (Rücksendeangabe). The text is taken from the
-   *Address* field of the document layout.
--  **Fold Marks**: print fold marks and the hole mark on every page.
+-  **Sender Line**: print the *Address* text of the document layout as a
+   single line above the recipient address (Rücksendeangabe); its lines
+   are joined with the *Separator* (``|``, ``•`` or ``·``) and *Font
+   scale* scales the 7 pt line. The address may contain placeholders;
+   the placeholder *DIN 5008 Sender Line Text* provides the company name
+   and address formatted with the separator and the *Country* option
+   (country code before the postal code, ``DE-12345 Berlin``, or the
+   country name at the end). Without address text the formatted company
+   address is printed.
+-  **Fold Marks** and **Hole Mark**: print the fold marks and the hole
+   mark on every page.
 -  **Address Window**: vertical offset (mm) of the address row relative
    to the DIN 5008 position, its minimum height (mm) and the height of
    the remark zone (Zusatz- und Vermerkzone) between the sender line and
@@ -91,9 +106,11 @@ The following settings appear once a DIN 5008 layout is selected:
    directly below the sender line.
 -  **Information Block**: distance from the left edge (mm) and width
    (mm) of the column next to the address window.
--  **Bottom Margin**: height (mm) of the footer area reserved by
-   wkhtmltopdf. Increase it when the footer content (company details,
-   footer text) needs more space.
+
+While one of these fields is focused, the affected area is outlined in
+the preview. The footer text with company placeholders, the shared
+footer lines and the bottom margin of the PDF reports are configured in
+the same wizard and come from the module ``l10n_de_report_footer``.
 
 The paper formats keep 0 mm side margins and disable smart shrinking so
 that the CSS millimetres of the layout equal the printed millimetres.
@@ -147,6 +164,9 @@ Contributors
 ------------
 
 -  Christopher Rogos (glueckkanja AG) <crogos@gmail.com>
+-  Nils Coenen (NICO SOLUTIONS - ENGINEERING & IT)
+   <nils.coenen@nico-solutions.de> (sender line formatting and mark
+   options, originally ``l10n_din5008_report_base``)
 
 Maintainers
 -----------

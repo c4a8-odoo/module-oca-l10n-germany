@@ -8,7 +8,6 @@ from odoo.tests import TransactionCase, tagged
 class TestCompany(TransactionCase):
     def test_defaults(self):
         company = self.env["res.company"].create({"name": "DIN Test Company"})
-        self.assertEqual(company.layout_din5008_margin_bottom, 25)
         self.assertEqual(company.layout_din5008_address_offset_top, 0)
         self.assertEqual(company.layout_din5008_address_height, 45)
         self.assertEqual(company.layout_din5008_info_left, 125)
@@ -16,13 +15,16 @@ class TestCompany(TransactionCase):
         self.assertEqual(company.layout_din5008_remark_zone_height, 0)
         self.assertEqual(company.layout_din5008_logo_position, "left")
         self.assertTrue(company.layout_din5008_fold_marks)
+        self.assertTrue(company.layout_din5008_hole_mark)
         self.assertTrue(company.layout_din5008_sender_line)
+        self.assertEqual(company.layout_din5008_sender_separator, "pipe")
+        self.assertEqual(company.layout_din5008_sender_country, "none")
+        self.assertEqual(company.layout_din5008_sender_font_factor, 1.0)
         self.assertEqual(company.layout_din5008_informations_position, "beside")
 
     def test_constraints(self):
         company = self.env.company
         for field_name, low, high in [
-            ("layout_din5008_margin_bottom", 5, 60),
             ("layout_din5008_address_offset_top", -10, 30),
             ("layout_din5008_address_height", 20, 80),
             ("layout_din5008_info_left", 105, 160),
@@ -35,3 +37,9 @@ class TestCompany(TransactionCase):
                 company.write({field_name: low - 1})
             with self.assertRaises(ValidationError):
                 company.write({field_name: high + 1})
+        company.layout_din5008_sender_font_factor = 0.5
+        company.layout_din5008_sender_font_factor = 2.0
+        with self.assertRaises(ValidationError):
+            company.layout_din5008_sender_font_factor = 0.4
+        with self.assertRaises(ValidationError):
+            company.layout_din5008_sender_font_factor = 2.1

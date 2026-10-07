@@ -13,6 +13,13 @@ Both DIN 5008 forms are available in the document layout configurator:
 - **Form A**: letterhead of 27 mm, address window starting at 27 mm.
 - **Form B**: letterhead of 45 mm, address window starting at 45 mm.
 
+The letterhead prints the logo on one side and the tagline on the other
+side. The address text of the document layout is printed as the sender line
+above the recipient address instead of as an address block. The footer prints the tax ID with the shared
+footer lines of `l10n_de_report_footer` (for example the company
+representatives) and the page numbers in a first row, followed by the footer
+text with rendered company placeholders across the full width.
+
 The layout places the sender line, the address window (20 mm from the left
 edge, 85 mm x 45 mm), the information block (125 mm from the left edge, 75 mm
 wide), the document title (two lines below the address window), the fold

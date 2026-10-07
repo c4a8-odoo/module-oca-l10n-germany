@@ -61,7 +61,7 @@ class TestPdfPositions(LayoutDin5008Common, HttpCase):
         texts, rects = self._render_pages()[0]
         # sender line inside the 5 mm zone at the top of the address window
         self._assert_box(
-            find_text(texts, "Acme GmbH"), 25, header, height=5, label="sender line"
+            find_text(texts, "Acme GmbH |"), 25, header, height=5, label="sender line"
         )
         # recipient starts below the sender zone (5 mm) and the remark zone
         self._assert_box(
@@ -85,7 +85,7 @@ class TestPdfPositions(LayoutDin5008Common, HttpCase):
         self.assertGreater(info_top, title_top)
         # footer inside the bottom margin
         footer_x, footer_top = find_text(texts, "Tel. +49")
-        self.assertGreaterEqual(footer_top, PAGE_HEIGHT - 25)
+        self.assertGreaterEqual(footer_top, PAGE_HEIGHT - 30)
         self.assertLessEqual(footer_top, PAGE_HEIGHT)
         return texts, rects
 
@@ -119,13 +119,14 @@ class TestPdfPositions(LayoutDin5008Common, HttpCase):
         self.assertGreater(title_top, last_info_top + 4)
 
     def test_margin_bottom_and_second_page(self):
-        self.company.layout_din5008_margin_bottom = 40
+        self.company.report_footer_margin_bottom = 40
         pages = self._render_pages(data={"n_rows": 40})
         self.assertGreaterEqual(len(pages), 2)
         for texts, rects in pages:
             footer_x, footer_top = find_text(texts, "Tel. +49")
+            # footer text is the last block of the enlarged footer area
             self.assertGreaterEqual(footer_top, PAGE_HEIGHT - 40)
-            self.assertLessEqual(footer_top, PAGE_HEIGHT - 40 + 15)
+            self.assertLessEqual(footer_top, PAGE_HEIGHT - 5)
             self._assert_marks(rects, [(87, 5), (148.5, 8), (192, 5)])
         # body content stays above the enlarged footer
         for texts, _ in pages:

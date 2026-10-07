@@ -73,6 +73,16 @@ class LayoutDin5008Common:
     @classmethod
     def _setup_din5008(cls):
         cls.company = cls.env.company
+        cls.company.name = "Acme GmbH"
+        cls.company.partner_id.write(
+            {
+                "street": "Musterstraße 1",
+                "street2": False,
+                "zip": "12345",
+                "city": "Berlin",
+                "country_id": cls.env.ref("base.de").id,
+            }
+        )
         cls.layout_a = cls.env.ref("layout_din5008.external_layout_din5008_a")
         cls.layout_b = cls.env.ref("layout_din5008.external_layout_din5008_b")
         cls.paperformat_a = cls.env.ref("layout_din5008.paperformat_din5008_a")
@@ -82,9 +92,10 @@ class LayoutDin5008Common:
                 "external_report_layout_id": cls.layout_a.id,
                 "paperformat_id": cls.paperformat_a.id,
                 "company_details": COMPANY_DETAILS,
+                "vat": "DE123456789",
                 "report_footer": REPORT_FOOTER,
                 "logo": LOGO_PNG,
-                "layout_din5008_margin_bottom": 25,
+                "report_footer_margin_bottom": 0,
                 "layout_din5008_address_offset_top": 0,
                 "layout_din5008_address_height": 45,
                 "layout_din5008_info_left": 125,
@@ -92,7 +103,11 @@ class LayoutDin5008Common:
                 "layout_din5008_remark_zone_height": 0,
                 "layout_din5008_logo_position": "left",
                 "layout_din5008_fold_marks": True,
+                "layout_din5008_hole_mark": True,
                 "layout_din5008_sender_line": True,
+                "layout_din5008_sender_separator": "pipe",
+                "layout_din5008_sender_country": "none",
+                "layout_din5008_sender_font_factor": 1.0,
                 "layout_din5008_informations_position": "beside",
             }
         )

@@ -11,7 +11,6 @@ from .layout_din5008_mixin import (
 )
 
 LAYOUT_DIN5008_RANGES = {
-    "layout_din5008_margin_bottom": (5, 60),
     "layout_din5008_address_offset_top": (-10, 30),
     "layout_din5008_address_height": (20, 80),
     "layout_din5008_info_left": (105, 160),
@@ -24,11 +23,6 @@ class ResCompany(models.Model):
     _name = "res.company"
     _inherit = ["res.company", "layout.din5008.mixin"]
 
-    layout_din5008_margin_bottom = fields.Integer(
-        string="DIN 5008 Bottom Margin (mm)",
-        default=25,
-        help="Bottom page margin reserved for the footer of DIN 5008 reports.",
-    )
     layout_din5008_address_offset_top = fields.Integer(
         string="DIN 5008 Address Window Offset (mm)",
         default=0,
@@ -68,15 +62,62 @@ class ResCompany(models.Model):
         "tagline is printed on the opposite side.",
     )
     layout_din5008_fold_marks = fields.Boolean(
-        string="DIN 5008 Fold and Hole Marks",
+        string="DIN 5008 Fold Marks",
         default=True,
-        help="Print fold marks and the hole mark on the left edge of every page.",
+        help="Print the fold marks on the left edge of every page.",
+    )
+    layout_din5008_hole_mark = fields.Boolean(
+        string="DIN 5008 Hole Mark",
+        default=True,
+        help="Print the hole mark on the left edge of every page.",
     )
     layout_din5008_sender_line = fields.Boolean(
         string="DIN 5008 Sender Line",
         default=True,
         help="Print the company address as a single line above the recipient "
         "address (Rücksendeangabe), visible in the envelope window.",
+    )
+    layout_din5008_sender_line_text = fields.Char(
+        string="DIN 5008 Sender Line Text",
+        compute="_compute_layout_din5008_sender_line_text",
+        store=True,
+        help="Name and address of the company formatted as a single line with "
+        "the configured separator and country indicator. Available as "
+        "placeholder in the address, tagline and footer texts of the document "
+        "layout; insert it into the address to print it as sender line.",
+    )
+    layout_din5008_sender_separator = fields.Selection(
+        selection=[
+            ("pipe", "Pipe (|)"),
+            ("bullet", "Bullet (•)"),
+            ("middot", "Middle dot (·)"),
+        ],
+        string="DIN 5008 Sender Line Separator",
+        default="pipe",
+        required=True,
+        help="Character between the lines of the address printed as sender line "
+        "above the recipient. The company name and address formatted this way "
+        "are available as the placeholder 'DIN 5008 Sender Line Text' in the "
+        "address, tagline and footer texts of the document layout.",
+    )
+    layout_din5008_sender_country = fields.Selection(
+        selection=[
+            ("none", "No country"),
+            ("code", "Country code before the postal code"),
+            ("name", "Country name"),
+        ],
+        string="DIN 5008 Sender Line Country",
+        default="none",
+        required=True,
+        help="How the country of the company is printed in the placeholder "
+        "'DIN 5008 Sender Line Text' (insert it into the address of the "
+        "document layout to print it as sender line).",
+    )
+    layout_din5008_sender_font_factor = fields.Float(
+        string="DIN 5008 Sender Line Font Scale",
+        default=1.0,
+        digits=(3, 2),
+        help="Scale factor of the sender line font size (1.0 = 7 pt).",
     )
     layout_din5008_informations_position = fields.Selection(
         selection=[
@@ -107,3 +148,35 @@ class ResCompany(models.Model):
                             high=high,
                         )
                     )
+
+    @api.model
+    def mail_allowed_qweb_expressions(self):
+        return super().mail_allowed_qweb_expressions() + (
+            "object.layout_din5008_sender_line_text",
+        )
+
+    @api.depends(
+        "name",
+        "partner_id.street",
+        "partner_id.street2",
+        "partner_id.zip",
+        "partner_id.city",
+        "partner_id.country_id",
+        "layout_din5008_sender_separator",
+        "layout_din5008_sender_country",
+    )
+    def _compute_layout_din5008_sender_line_text(self):
+        for company in self:
+            company.layout_din5008_sender_line_text = (
+                company._layout_din5008_format_sender_line()
+            )
+
+    @api.constrains("layout_din5008_sender_font_factor")
+    def _check_layout_din5008_sender_font_factor(self):
+        for company in self:
+            if not 0.5 <= company.layout_din5008_sender_font_factor <= 2.0:
+                raise ValidationError(
+                    self.env._(
+                        "The sender line font scale must be between 0.5 and 2.0."
+                    )
+                )

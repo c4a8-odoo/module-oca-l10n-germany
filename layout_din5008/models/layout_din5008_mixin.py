@@ -15,6 +15,9 @@ DIN5008_FORMS = {
     "B": {"header_height": 45, "fold_marks": (105, 210)},
 }
 DIN5008_HOLE_MARK = 148.5
+# Sender line (Rücksendeangabe): separators and base font size in pt
+DIN5008_SENDER_SEPARATORS = {"pipe": " | ", "bullet": " • ", "middot": " · "}
+DIN5008_SENDER_FONT_SIZE = 7
 # Address window: 20 mm from the left edge, 85 mm wide, 45 mm high.
 DIN5008_ADDRESS_LEFT = 20
 DIN5008_ADDRESS_WIDTH = 85
@@ -60,18 +63,45 @@ class LayoutDin5008Mixin(models.AbstractModel):
     _name = "layout.din5008.mixin"
     _description = "DIN 5008 Layout Helpers"
 
+    def _layout_din5008_separator(self):
+        return DIN5008_SENDER_SEPARATORS.get(
+            self.layout_din5008_sender_separator, DIN5008_SENDER_SEPARATORS["pipe"]
+        )
+
     def _layout_din5008_sender_line(self):
-        """Return the sender line (Rücksendeangabe) printed above the recipient."""
+        """Return the sender line (Rücksendeangabe) printed above the recipient.
+
+        The address text of the document layout (with rendered placeholders)
+        is printed as a single line, its lines joined by the configured
+        separator. Without address text the formatted company address is used.
+        """
         self.ensure_one()
-        lines = []
-        if self.company_details:
-            lines = html2plaintext(self.company_details).splitlines()
+        lines = html2plaintext(self._render_company_details() or "").splitlines()
         lines = [line.strip() for line in lines if line.strip()]
-        if not lines and self.partner_id:
-            address = self.partner_id._display_address(without_company=True) or ""
-            lines = [self.name or "", *address.splitlines()]
-            lines = [line.strip() for line in lines if line.strip()]
-        return " · ".join(lines)
+        if not lines:
+            return self._layout_din5008_format_sender_line()
+        return self._layout_din5008_separator().join(lines)
+
+    def _layout_din5008_format_sender_line(self):
+        """Company name and address fields formatted as a single line."""
+        self.ensure_one()
+        partner = self.partner_id
+        separator = self._layout_din5008_separator()
+        indicator = self.layout_din5008_sender_country or "none"
+        parts = [self.name or ""]
+        if partner:
+            country = partner.country_id
+            zip_code = partner.zip or ""
+            if indicator == "code" and zip_code and country.code:
+                zip_code = f"{country.code}-{zip_code}"
+            parts += [
+                partner.street or "",
+                partner.street2 or "",
+                " ".join(part for part in (zip_code, partner.city or "") if part),
+            ]
+            if indicator == "name" and country:
+                parts.append(country.name)
+        return separator.join(part.strip() for part in parts if part and part.strip())
 
     def _layout_din5008_scope_class(self):
         """CSS class scoping the company specific rules of one rendered article."""
@@ -87,6 +117,7 @@ class LayoutDin5008Mixin(models.AbstractModel):
         info_left = self.layout_din5008_info_left or DIN5008_INFO_LEFT
         info_width = self.layout_din5008_info_width or DIN5008_INFO_WIDTH
         remark_height = self.layout_din5008_remark_zone_height or 0
+        font_factor = self.layout_din5008_sender_font_factor or 1.0
         recipient_top = DIN5008_SENDER_ZONE_HEIGHT + remark_height
         scope = f".o_layout_din5008.{self._layout_din5008_scope_class()}"
         company_css = (
@@ -103,7 +134,10 @@ class LayoutDin5008Mixin(models.AbstractModel):
             "form": form,
             "header_height": spec["header_height"],
             "header": f"height: {spec['header_height']}mm;",
-            "sender_line": f"top: {offset_top}mm;",
+            "sender_line": (
+                f"top: {offset_top}mm; "
+                f"font-size: {DIN5008_SENDER_FONT_SIZE * font_factor:g}pt;"
+            ),
             "fold_marks": [f"top: {top}mm;" for top in spec["fold_marks"]],
             "hole_mark": f"top: {DIN5008_HOLE_MARK}mm;",
             "company_css": Markup(company_css),

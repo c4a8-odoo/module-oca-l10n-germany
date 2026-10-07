@@ -47,14 +47,20 @@
             <style t-if="report_type == 'pdf'">
                 body.o_body_pdf.container { max-width: none; padding: 0; margin: 0; }
             </style>
-            <div class="din5008_marks" t-if="company.layout_din5008_fold_marks">
+            <div
+                class="din5008_marks"
+                t-if="company.layout_din5008_fold_marks or company.layout_din5008_hole_mark"
+            >
+                <t t-if="company.layout_din5008_fold_marks">
+                    <div
+                        t-foreach="din5008_geometry['fold_marks']"
+                        t-as="din5008_mark"
+                        class="din5008_mark din5008_fold_mark"
+                        t-att-style="din5008_mark"
+                    />
+                </t>
                 <div
-                    t-foreach="din5008_geometry['fold_marks']"
-                    t-as="din5008_mark"
-                    class="din5008_mark din5008_fold_mark"
-                    t-att-style="din5008_mark"
-                />
-                <div
+                    t-if="company.layout_din5008_hole_mark"
                     class="din5008_mark din5008_hole_mark"
                     t-att-style="din5008_geometry['hole_mark']"
                 />
@@ -74,9 +80,6 @@
             <attribute
                 name="t-att-data-din5008-informations"
             >'beside' if din5008_beside else 'below'</attribute>
-            <attribute
-                name="t-att-data-din5008-margin-bottom"
-            >company.layout_din5008_margin_bottom if report_type == 'pdf' else None</attribute>
         </xpath>
         <xpath expr="//t[@t-call='web.address_layout']" position="before">
             <style>
@@ -132,7 +135,12 @@
             <t t-if="din5008_beside" t-out="din5008_parts[1]" />
         </xpath>
 
-        <!-- Footer: company address block moved from the header -->
+        <!-- The address of the layout is printed as sender line, not as block -->
+        <xpath expr="//div[@name='company_address']" position="attributes">
+            <attribute name="t-if">False</attribute>
+        </xpath>
+
+        <!-- Footer: VAT number and shared footer lines moved from the company address block -->
         <xpath
             expr="//div[contains(concat(' ', @t-attf-class, ' '), ' footer ')]"
             position="attributes"
@@ -151,7 +159,45 @@
             expr="//div[contains(concat(' ', @t-attf-class, ' '), ' footer ')]//div[hasclass('o_footer_content')]/div[1]"
             position="before"
         >
-            <xpath expr="//div[@name='company_address']" position="move" />
+            <ul
+                class="list-unstyled din5008_footer_legal"
+                name="din5008_footer_legal"
+            />
+        </xpath>
+        <!-- moved nodes must be direct children of the spec -->
+        <xpath expr="//ul[@name='din5008_footer_legal']" position="inside">
+            <xpath
+                expr="//ul[@name='company_address_list']/li[@t-if='not forced_vat']"
+                position="move"
+            />
+        </xpath>
+        <xpath expr="//ul[@name='din5008_footer_legal']" position="inside">
+            <xpath
+                expr="//ul[@name='company_address_list']/li[@t-else][last()]"
+                position="move"
+            />
+        </xpath>
+        <xpath expr="//ul[@name='din5008_footer_legal']" position="inside">
+            <xpath
+                expr="//ul[@name='company_address_list']/t[@t-call='l10n_de_report_footer.footer_lines']"
+                position="move"
+            />
+        </xpath>
+        <!-- footer text as a full width block below the company block and page number -->
+        <xpath
+            expr="//div[contains(concat(' ', @t-attf-class, ' '), ' footer ')]//div[hasclass('o_footer_content')]/div[hasclass('text-start')]"
+            position="attributes"
+        >
+            <attribute name="class" add="din5008_footer_text" separator=" " />
+        </xpath>
+        <xpath
+            expr="//div[contains(concat(' ', @t-attf-class, ' '), ' footer ')]//div[hasclass('o_footer_content')]"
+            position="after"
+        >
+            <xpath
+                expr="//div[hasclass('o_footer_content')]/div[hasclass('din5008_footer_text')]"
+                position="move"
+            />
         </xpath>
     </template>
 

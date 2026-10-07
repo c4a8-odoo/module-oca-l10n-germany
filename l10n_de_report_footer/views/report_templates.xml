@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- Bottom margin of the rendering company, forwarded to wkhtmltopdf -->
+    <template id="report_layout" inherit_id="web.report_layout">
+        <xpath expr="//html" position="attributes">
+            <attribute
+                name="t-att-data-report-margin-bottom"
+            >data_report_margin_bottom</attribute>
+        </xpath>
+    </template>
+
+    <!--
+        Footer lines shared by all layouts. Modules add <li> elements inside
+        the hook node; the layouts call this template inside their company
+        address list.
+    -->
+    <template id="footer_lines" name="Report footer lines">
+        <t name="l10n_de_report_footer_lines" />
+    </template>
+
+    <!--
+        Standard layouts: render the placeholders of the footer text, the
+        company address and the tagline, add the footer lines to the company
+        address block and show the bottom margin as footer height in the HTML
+        preview (the PDF margin is set by wkhtmltopdf).
+    -->
+    <template id="external_layout_standard" inherit_id="web.external_layout_standard">
+        <xpath expr="//*[@t-field='company.report_footer']" position="attributes">
+            <attribute name="t-field" />
+            <attribute name="t-out">company._render_report_footer()</attribute>
+        </xpath>
+        <xpath expr="//*[@t-field='company.company_details']" position="attributes">
+            <attribute name="t-field" />
+            <attribute name="t-out">company._render_company_details()</attribute>
+        </xpath>
+        <xpath expr="//*[@t-field='company.report_header']" position="attributes">
+            <attribute name="t-field" />
+            <attribute name="t-out">company._render_report_header()</attribute>
+        </xpath>
+        <xpath expr="//ul[@name='company_address_list']" position="inside">
+            <t t-call="l10n_de_report_footer.footer_lines" />
+        </xpath>
+        <xpath
+            expr="//div[contains(concat(' ', @t-attf-class, ' '), ' footer ')]"
+            position="attributes"
+        >
+            <attribute
+                name="t-att-style"
+            >'min-height: %smm;' % company.report_footer_margin_bottom if report_type != 'pdf' and company.report_footer_margin_bottom else None</attribute>
+        </xpath>
+    </template>
+
+    <template id="external_layout_boxed" inherit_id="web.external_layout_boxed">
+        <xpath expr="//*[@t-field='company.report_footer']" position="attributes">
+            <attribute name="t-field" />
+            <attribute name="t-out">company._render_report_footer()</attribute>
+        </xpath>
+        <xpath expr="//*[@t-field='company.company_details']" position="attributes">
+            <attribute name="t-field" />
+            <attribute name="t-out">company._render_company_details()</attribute>
+        </xpath>
+        <xpath expr="//*[@t-field='company.report_header']" position="attributes">
+            <attribute name="t-field" />
+            <attribute name="t-out">company._render_report_header()</attribute>
+        </xpath>
+        <xpath expr="//ul[@name='company_address_list']" position="inside">
+            <t t-call="l10n_de_report_footer.footer_lines" />
+        </xpath>
+        <xpath
+            expr="//div[contains(concat(' ', @t-attf-class, ' '), ' footer ')]"
+            position="attributes"
+        >
+            <attribute
+                name="t-att-style"
+            >'min-height: %smm;' % company.report_footer_margin_bottom if report_type != 'pdf' and company.report_footer_margin_bottom else None</attribute>
+        </xpath>
+    </template>
+
+    <template id="external_layout_bold" inherit_id="web.external_layout_bold">
+        <xpath expr="//*[@t-field='company.report_footer']" position="attributes">
+            <attribute name="t-field" />
+            <attribute name="t-out">company._render_report_footer()</attribute>
+        </xpath>
+        <xpath expr="//*[@t-field='company.company_details']" position="attributes">
+            <attribute name="t-field" />
+            <attribute name="t-out">company._render_company_details()</attribute>
+        </xpath>
+        <xpath expr="//*[@t-field='company.report_header']" position="attributes">
+            <attribute name="t-field" />
+            <attribute name="t-out">company._render_report_header()</attribute>
+        </xpath>
+        <xpath expr="//ul[@name='company_address_list']" position="inside">
+            <t t-call="l10n_de_report_footer.footer_lines" />
+        </xpath>
+        <xpath
+            expr="//div[contains(concat(' ', @t-attf-class, ' '), ' footer ')]"
+            position="attributes"
+        >
+            <attribute
+                name="t-att-style"
+            >'min-height: %smm;' % company.report_footer_margin_bottom if report_type != 'pdf' and company.report_footer_margin_bottom else None</attribute>
+        </xpath>
+    </template>
+
+    <template id="external_layout_striped" inherit_id="web.external_layout_striped">
+        <xpath expr="//*[@t-field='company.report_footer']" position="attributes">
+            <attribute name="t-field" />
+            <attribute name="t-out">company._render_report_footer()</attribute>
+        </xpath>
+        <xpath expr="//*[@t-field='company.company_details']" position="attributes">
+            <attribute name="t-field" />
+            <attribute name="t-out">company._render_company_details()</attribute>
+        </xpath>
+        <xpath expr="//*[@t-field='company.report_header']" position="attributes">
+            <attribute name="t-field" />
+            <attribute name="t-out">company._render_report_header()</attribute>
+        </xpath>
+        <xpath expr="//ul[@name='company_address_list']" position="inside">
+            <t t-call="l10n_de_report_footer.footer_lines" />
+        </xpath>
+        <xpath
+            expr="//div[contains(concat(' ', @t-attf-class, ' '), ' footer ')]"
+            position="attributes"
+        >
+            <attribute
+                name="t-att-style"
+            >'min-height: %smm;' % company.report_footer_margin_bottom if report_type != 'pdf' and company.report_footer_margin_bottom else None</attribute>
+        </xpath>
+    </template>
+
+    <template id="external_layout_folder" inherit_id="web.external_layout_folder">
+        <xpath expr="//*[@t-field='company.report_footer']" position="attributes">
+            <attribute name="t-field" />
+            <attribute name="t-out">company._render_report_footer()</attribute>
+        </xpath>
+        <xpath expr="//*[@t-field='company.company_details']" position="attributes">
+            <attribute name="t-field" />
+            <attribute name="t-out">company._render_company_details()</attribute>
+        </xpath>
+        <xpath expr="//*[@t-field='company.report_header']" position="attributes">
+            <attribute name="t-field" />
+            <attribute name="t-out">company._render_report_header()</attribute>
+        </xpath>
+        <xpath expr="//ul[@name='company_address_list']" position="inside">
+            <t t-call="l10n_de_report_footer.footer_lines" />
+        </xpath>
+        <xpath
+            expr="//div[contains(concat(' ', @t-attf-class, ' '), ' footer ')]"
+            position="attributes"
+        >
+            <attribute
+                name="t-att-style"
+            >'min-height: %smm;' % company.report_footer_margin_bottom if report_type != 'pdf' and company.report_footer_margin_bottom else None</attribute>
+        </xpath>
+    </template>
+
+    <template id="external_layout_wave" inherit_id="web.external_layout_wave">
+        <xpath expr="//*[@t-field='company.report_footer']" position="attributes">
+            <attribute name="t-field" />
+            <attribute name="t-out">company._render_report_footer()</attribute>
+        </xpath>
+        <xpath expr="//*[@t-field='company.company_details']" position="attributes">
+            <attribute name="t-field" />
+            <attribute name="t-out">company._render_company_details()</attribute>
+        </xpath>
+        <xpath expr="//*[@t-field='company.report_header']" position="attributes">
+            <attribute name="t-field" />
+            <attribute name="t-out">company._render_report_header()</attribute>
+        </xpath>
+        <xpath expr="//ul[@name='company_address_list']" position="inside">
+            <t t-call="l10n_de_report_footer.footer_lines" />
+        </xpath>
+        <xpath
+            expr="//div[contains(concat(' ', @t-attf-class, ' '), ' footer ')]"
+            position="attributes"
+        >
+            <attribute
+                name="t-att-style"
+            >'min-height: %smm;' % company.report_footer_margin_bottom if report_type != 'pdf' and company.report_footer_margin_bottom else None</attribute>
+        </xpath>
+    </template>
+
+    <template id="external_layout_bubble" inherit_id="web.external_layout_bubble">
+        <xpath expr="//*[@t-field='company.report_footer']" position="attributes">
+            <attribute name="t-field" />
+            <attribute name="t-out">company._render_report_footer()</attribute>
+        </xpath>
+        <xpath expr="//*[@t-field='company.company_details']" position="attributes">
+            <attribute name="t-field" />
+            <attribute name="t-out">company._render_company_details()</attribute>
+        </xpath>
+        <xpath expr="//*[@t-field='company.report_header']" position="attributes">
+            <attribute name="t-field" />
+            <attribute name="t-out">company._render_report_header()</attribute>
+        </xpath>
+        <xpath expr="//ul[@name='company_address_list']" position="inside">
+            <t t-call="l10n_de_report_footer.footer_lines" />
+        </xpath>
+        <xpath
+            expr="//div[contains(concat(' ', @t-attf-class, ' '), ' footer ')]"
+            position="attributes"
+        >
+            <attribute
+                name="t-att-style"
+            >'min-height: %smm;' % company.report_footer_margin_bottom if report_type != 'pdf' and company.report_footer_margin_bottom else None</attribute>
+        </xpath>
+    </template>
+</odoo>

@@ -42,14 +42,14 @@ class TestWizard(LayoutDin5008Common, TransactionCase):
         with Form(self.env["base.document.layout"]) as wizard:
             wizard.report_layout_id = self.report_layout_b
             wizard.layout_din5008_fold_marks = False
-            wizard.layout_din5008_margin_bottom = 40
+            wizard.report_footer_margin_bottom = 40
             wizard.layout_din5008_remark_zone_height = 12.7
             wizard.layout_din5008_logo_position = "right"
             wizard.layout_din5008_informations_position = "below"
         self.assertEqual(self.company.external_report_layout_id, self.layout_b)
         self.assertEqual(self.company.paperformat_id, self.paperformat_b)
         self.assertFalse(self.company.layout_din5008_fold_marks)
-        self.assertEqual(self.company.layout_din5008_margin_bottom, 40)
+        self.assertEqual(self.company.report_footer_margin_bottom, 40)
         self.assertEqual(self.company.layout_din5008_remark_zone_height, 12.7)
         self.assertEqual(self.company.layout_din5008_logo_position, "right")
         self.assertEqual(self.company.layout_din5008_informations_position, "below")
@@ -58,14 +58,14 @@ class TestWizard(LayoutDin5008Common, TransactionCase):
         with self.assertRaises(ValidationError):
             with Form(self.env["base.document.layout"]) as wizard:
                 wizard.report_layout_id = self.report_layout_a
-                wizard.layout_din5008_margin_bottom = 70
+                wizard.report_footer_margin_bottom = 70
 
     def test_preview(self):
         with Form(self.env["base.document.layout"]) as wizard:
             self.assertEqual(wizard.report_layout_id, self.report_layout_a)
             preview = wizard.preview
             self.assertIn("din5008_sender_line", preview)
-            self.assertIn("Acme GmbH · Musterstraße 1 · 12345 Berlin", preview)
+            self.assertIn("Acme GmbH | Musterstraße 1 | 12345 Berlin", preview)
             self.assertIn("o_layout_din5008", preview)
             self.assertIn('style="height: 27mm;"', preview)
             # "beside" is the default: the information block is relocated
@@ -86,3 +86,19 @@ class TestWizard(LayoutDin5008Common, TransactionCase):
 
             wizard.layout_din5008_logo_position = "right"
             self.assertIn('data-din5008-logo="right"', wizard.preview)
+
+            # the sender line placeholder in the address follows the unsaved
+            # format settings of the wizard
+            wizard.layout_din5008_sender_line = True
+            wizard.company_details = (
+                '<p><t t-out="object.layout_din5008_sender_line_text"/></p>'
+            )
+            wizard.layout_din5008_sender_separator = "bullet"
+            wizard.layout_din5008_sender_country = "code"
+            self.assertIn(
+                "Acme GmbH • Musterstraße 1 • DE-12345 Berlin", wizard.preview
+            )
+            self.assertEqual(
+                self.company.layout_din5008_sender_line_text,
+                "Acme GmbH | Musterstraße 1 | 12345 Berlin",
+            )
