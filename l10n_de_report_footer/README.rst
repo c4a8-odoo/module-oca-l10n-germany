@@ -42,7 +42,10 @@ standard Odoo layouts, the DIN 5008 layout shipped with Odoo
    tagline of the document layout can contain company data (phone,
    e-mail, VAT, bank account, ...) inserted with the dynamic placeholder
    picker of the HTML editor (type ``/`` in the editor). The
-   placeholders are rendered when a report is printed.
+   placeholders are rendered when a report is printed. With the module
+   ``html_editor_icon`` (OCA/web) installed, the same texts offer an
+   ``/icon`` command to insert Font Awesome pictograms, for example in
+   front of the phone number or the e-mail address.
 -  **Footer lines**: a shared QWeb hook
    (``l10n_de_report_footer.footer_lines``) in the company address block
    of every layout. Modules such as

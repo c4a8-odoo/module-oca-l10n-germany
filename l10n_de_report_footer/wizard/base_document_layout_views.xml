@@ -13,7 +13,7 @@
             <field name="report_footer" position="attributes">
                 <attribute
                     name="options"
-                >{'resizable': false, 'dynamic_placeholder': true, 'dynamic_placeholder_model_reference_field': 'report_footer_render_model'}</attribute>
+                >{'resizable': false, 'icon_picker': true, 'dynamic_placeholder': true, 'dynamic_placeholder_model_reference_field': 'report_footer_render_model'}</attribute>
                 <attribute
                     name="placeholder"
                 >Write your phone, email, bank account, tax ID, ... Type / to insert company data.</attribute>
@@ -21,12 +21,12 @@
             <field name="company_details" position="attributes">
                 <attribute
                     name="options"
-                >{'resizable': false, 'dynamic_placeholder': true, 'dynamic_placeholder_model_reference_field': 'report_footer_render_model'}</attribute>
+                >{'resizable': false, 'icon_picker': true, 'dynamic_placeholder': true, 'dynamic_placeholder_model_reference_field': 'report_footer_render_model'}</attribute>
             </field>
             <field name="report_header" position="attributes">
                 <attribute
                     name="options"
-                >{'resizable': false, 'dynamic_placeholder': true, 'dynamic_placeholder_model_reference_field': 'report_footer_render_model'}</attribute>
+                >{'resizable': false, 'icon_picker': true, 'dynamic_placeholder': true, 'dynamic_placeholder_model_reference_field': 'report_footer_render_model'}</attribute>
             </field>
             <field name="paperformat_id" position="after">
                 <field
