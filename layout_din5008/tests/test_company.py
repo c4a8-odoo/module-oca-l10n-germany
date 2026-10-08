@@ -19,7 +19,6 @@ class TestCompany(TransactionCase):
         self.assertTrue(company.layout_din5008_sender_line)
         self.assertEqual(company.layout_din5008_sender_separator, "pipe")
         self.assertEqual(company.layout_din5008_sender_country, "none")
-        self.assertEqual(company.layout_din5008_sender_font_factor, 1.0)
         self.assertEqual(company.layout_din5008_informations_position, "beside")
 
     def test_constraints(self):
@@ -37,9 +36,3 @@ class TestCompany(TransactionCase):
                 company.write({field_name: low - 1})
             with self.assertRaises(ValidationError):
                 company.write({field_name: high + 1})
-        company.layout_din5008_sender_font_factor = 0.5
-        company.layout_din5008_sender_font_factor = 2.0
-        with self.assertRaises(ValidationError):
-            company.layout_din5008_sender_font_factor = 0.4
-        with self.assertRaises(ValidationError):
-            company.layout_din5008_sender_font_factor = 2.1

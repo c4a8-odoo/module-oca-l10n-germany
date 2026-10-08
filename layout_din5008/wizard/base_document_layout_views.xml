@@ -58,11 +58,6 @@
                                 string="Country"
                                 invisible="not layout_din5008_sender_line"
                             />
-                            <field
-                                name="layout_din5008_sender_font_factor"
-                                string="Font Scale"
-                                invisible="not layout_din5008_sender_line"
-                            />
                         </group>
                     </page>
                     <page name="layout_din5008_geometry" string="Positions (mm)">
@@ -96,6 +91,19 @@
                     </page>
                 </notebook>
             </xpath>
+            <!--
+                The bottom margin of l10n_de_report_footer is a position too;
+                a move is only processed as a direct child of the spec node.
+            -->
+            <xpath
+                expr="//page[@name='layout_din5008_geometry']/group"
+                position="inside"
+            >
+                <field name="report_footer_margin_bottom" position="move" />
+            </xpath>
+            <field name="report_footer_margin_bottom" position="attributes">
+                <attribute name="string">Bottom Margin</attribute>
+            </field>
         </field>
     </record>
 </odoo>

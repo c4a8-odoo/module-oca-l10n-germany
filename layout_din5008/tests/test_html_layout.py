@@ -65,7 +65,7 @@ class TestHtmlLayout(LayoutDin5008Common, TransactionCase):
         # sender line above the address window
         sender = self._one(article, ".//div[@class='din5008_sender_line']")
         self.assertEqual(sender.text, "Acme GmbH | Musterstraße 1 | 12345 Berlin")
-        self.assertEqual(sender.get("style"), "top: 0mm; font-size: 7pt;")
+        self.assertEqual(sender.get("style"), "top: 0mm;")
 
         # standard address row with the information block after the address
         row = self._one(article, ADDRESS_ROW)
@@ -156,14 +156,13 @@ class TestHtmlLayout(LayoutDin5008Common, TransactionCase):
             {
                 "layout_din5008_sender_separator": "middot",
                 "layout_din5008_sender_country": "code",
-                "layout_din5008_sender_font_factor": 1.2,
             }
         )
         tree = self._render_tree()
         sender = self._one(tree, "//div[@class='din5008_sender_line']")
         # the address text is printed as sender line, joined by the separator
         self.assertEqual(sender.text, "Acme GmbH · Musterstraße 1 · 12345 Berlin")
-        self.assertEqual(sender.get("style"), "top: 0mm; font-size: 8.4pt;")
+        self.assertEqual(sender.get("style"), "top: 0mm;")
         # the formatted placeholder in the address applies the country option
         self.company.company_details = (
             '<p><t t-out="object.layout_din5008_sender_line_text"/></p>'
@@ -189,7 +188,7 @@ class TestHtmlLayout(LayoutDin5008Common, TransactionCase):
         self.assertIn("padding-top: 13mm", style)
         self.assertIn("margin-left: 100mm; width: 80mm", style)
         sender = self._one(article, ".//div[@class='din5008_sender_line']")
-        self.assertEqual(sender.get("style"), "top: 3mm; font-size: 7pt;")
+        self.assertEqual(sender.get("style"), "top: 3mm;")
 
     def test_extension_of_standard_layout_applies(self):
         """Extensions of web.external_layout_standard apply to the DIN layout."""

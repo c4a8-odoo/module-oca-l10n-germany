@@ -16,7 +16,6 @@ LAYOUT_DIN5008_FIELDS = [
     "layout_din5008_sender_line",
     "layout_din5008_sender_separator",
     "layout_din5008_sender_country",
-    "layout_din5008_sender_font_factor",
     "layout_din5008_informations_position",
 ]
 
@@ -57,9 +56,6 @@ class BaseDocumentLayout(models.TransientModel):
     )
     layout_din5008_sender_country = fields.Selection(
         related="company_id.layout_din5008_sender_country", readonly=False
-    )
-    layout_din5008_sender_font_factor = fields.Float(
-        related="company_id.layout_din5008_sender_font_factor", readonly=False
     )
     layout_din5008_informations_position = fields.Selection(
         related="company_id.layout_din5008_informations_position", readonly=False

@@ -105,7 +105,7 @@ class TestHelpers(LayoutDin5008Common, TransactionCase):
         self.assertEqual(geometry["header"], "height: 27mm;")
         self.assertEqual(geometry["fold_marks"], ["top: 87mm;", "top: 192mm;"])
         self.assertEqual(geometry["hole_mark"], "top: 148.5mm;")
-        self.assertEqual(geometry["sender_line"], "top: 0mm; font-size: 7pt;")
+        self.assertEqual(geometry["sender_line"], "top: 0mm;")
         self.assertIn("min-height: 45mm", geometry["company_css"])
         self.assertIn("padding-top: 5mm", geometry["company_css"])
         self.assertIn("margin-left: 105mm; width: 75mm", geometry["company_css"])
@@ -124,11 +124,10 @@ class TestHelpers(LayoutDin5008Common, TransactionCase):
                 "layout_din5008_info_left": 130,
                 "layout_din5008_info_width": 60,
                 "layout_din5008_remark_zone_height": 12.7,
-                "layout_din5008_sender_font_factor": 1.5,
             }
         )
         geometry = self.company._layout_din5008_geometry("A")
-        self.assertEqual(geometry["sender_line"], "top: 5mm; font-size: 10.5pt;")
+        self.assertEqual(geometry["sender_line"], "top: 5mm;")
         self.assertIn("padding-top: 17.7mm", geometry["company_css"])
         self.assertIn("margin-top: 5mm; min-height: 50mm", geometry["company_css"])
         self.assertIn("margin-left: 110mm; width: 60mm", geometry["company_css"])

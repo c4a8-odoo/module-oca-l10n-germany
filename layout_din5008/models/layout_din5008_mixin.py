@@ -15,9 +15,8 @@ DIN5008_FORMS = {
     "B": {"header_height": 45, "fold_marks": (105, 210)},
 }
 DIN5008_HOLE_MARK = 148.5
-# Sender line (Rücksendeangabe): separators and base font size in pt
+# Sender line (Rücksendeangabe): separators
 DIN5008_SENDER_SEPARATORS = {"pipe": " | ", "bullet": " • ", "middot": " · "}
-DIN5008_SENDER_FONT_SIZE = 7
 # Address window: 20 mm from the left edge, 45 mm high (the 85 mm width is
 # fixed in the stylesheet).
 DIN5008_ADDRESS_LEFT = 20
@@ -117,7 +116,6 @@ class LayoutDin5008Mixin(models.AbstractModel):
         info_left = self.layout_din5008_info_left or DIN5008_INFO_LEFT
         info_width = self.layout_din5008_info_width or DIN5008_INFO_WIDTH
         remark_height = self.layout_din5008_remark_zone_height or 0
-        font_factor = self.layout_din5008_sender_font_factor or 1.0
         recipient_top = DIN5008_SENDER_ZONE_HEIGHT + remark_height
         scope = f".o_layout_din5008.{self._layout_din5008_scope_class()}"
         company_css = (
@@ -132,10 +130,7 @@ class LayoutDin5008Mixin(models.AbstractModel):
         )
         return {
             "header": f"height: {spec['header_height']}mm;",
-            "sender_line": (
-                f"top: {offset_top}mm; "
-                f"font-size: {DIN5008_SENDER_FONT_SIZE * font_factor:g}pt;"
-            ),
+            "sender_line": f"top: {offset_top}mm;",
             "fold_marks": [f"top: {top}mm;" for top in spec["fold_marks"]],
             "hole_mark": f"top: {DIN5008_HOLE_MARK}mm;",
             "company_css": Markup(company_css),

@@ -110,7 +110,6 @@ class LayoutDin5008Common(ReportFooterCommon):
                 "layout_din5008_sender_line": True,
                 "layout_din5008_sender_separator": "pipe",
                 "layout_din5008_sender_country": "none",
-                "layout_din5008_sender_font_factor": 1.0,
                 "layout_din5008_informations_position": "beside",
             }
         )

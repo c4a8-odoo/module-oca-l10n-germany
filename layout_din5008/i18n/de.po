@@ -163,12 +163,6 @@ msgid "DIN 5008 Sender Line Country"
 msgstr "DIN 5008 Land in der Rücksendeangabe"
 
 #. module: layout_din5008
-#: model:ir.model.fields,field_description:layout_din5008.field_base_document_layout__layout_din5008_sender_font_factor
-#: model:ir.model.fields,field_description:layout_din5008.field_res_company__layout_din5008_sender_font_factor
-msgid "DIN 5008 Sender Line Font Scale"
-msgstr "DIN 5008 Schriftgröße der Rücksendeangabe"
-
-#. module: layout_din5008
 #: model:ir.model.fields,field_description:layout_din5008.field_base_document_layout__layout_din5008_sender_separator
 #: model:ir.model.fields,field_description:layout_din5008.field_res_company__layout_din5008_sender_separator
 msgid "DIN 5008 Sender Line Separator"
@@ -201,11 +195,6 @@ msgstr "Dokumentinformationen"
 #: model_terms:ir.ui.view,arch_db:layout_din5008.view_base_document_layout
 msgid "Fold Marks"
 msgstr "Falzmarken"
-
-#. module: layout_din5008
-#: model_terms:ir.ui.view,arch_db:layout_din5008.view_base_document_layout
-msgid "Font Scale"
-msgstr "Schriftgröße"
 
 #. module: layout_din5008
 #: model:ir.model.fields,help:layout_din5008.field_base_document_layout__layout_din5008_remark_zone_height
@@ -357,12 +346,6 @@ msgstr "Höhe der Vermerkzone"
 #: model:ir.model.fields.selection,name:layout_din5008.selection__res_company__layout_din5008_logo_position__right
 msgid "Right"
 msgstr "Rechts"
-
-#. module: layout_din5008
-#: model:ir.model.fields,help:layout_din5008.field_base_document_layout__layout_din5008_sender_font_factor
-#: model:ir.model.fields,help:layout_din5008.field_res_company__layout_din5008_sender_font_factor
-msgid "Scale factor of the sender line font size (1.0 = 7 pt)."
-msgstr "Skalierungsfaktor der Schriftgröße der Rücksendeangabe (1,0 = 7 pt)."
 
 #. module: layout_din5008
 #: model_terms:ir.ui.view,arch_db:layout_din5008.view_base_document_layout

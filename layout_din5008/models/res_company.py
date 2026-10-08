@@ -10,14 +10,13 @@ from .layout_din5008_mixin import (
     DIN5008_REMARK_ZONE_HEIGHT,
 )
 
-# Allowed values of the numeric settings (mm, the font scale is a factor)
+# Allowed values of the numeric settings (mm)
 LAYOUT_DIN5008_RANGES = {
     "layout_din5008_address_offset_top": (-10, 30),
     "layout_din5008_address_height": (20, 80),
     "layout_din5008_info_left": (105, 160),
     "layout_din5008_info_width": (30, 90),
     "layout_din5008_remark_zone_height": (0, 20),
-    "layout_din5008_sender_font_factor": (0.5, 2.0),
 }
 
 
@@ -65,12 +64,12 @@ class ResCompany(models.Model):
     )
     layout_din5008_fold_marks = fields.Boolean(
         string="DIN 5008 Fold Marks",
-        default=True,
+        default=False,
         help="Print the fold marks on the left edge of every page.",
     )
     layout_din5008_hole_mark = fields.Boolean(
         string="DIN 5008 Hole Mark",
-        default=True,
+        default=False,
         help="Print the hole mark on the left edge of every page.",
     )
     layout_din5008_sender_line = fields.Boolean(
@@ -114,12 +113,6 @@ class ResCompany(models.Model):
         help="How the country of the company is printed in the placeholder "
         "'DIN 5008 Sender Line Text' (insert it into the address of the "
         "document layout to print it as sender line).",
-    )
-    layout_din5008_sender_font_factor = fields.Float(
-        string="DIN 5008 Sender Line Font Scale",
-        default=1.0,
-        digits=(3, 2),
-        help="Scale factor of the sender line font size (1.0 = 7 pt).",
     )
     layout_din5008_informations_position = fields.Selection(
         selection=[
