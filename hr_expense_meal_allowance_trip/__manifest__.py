@@ -8,7 +8,7 @@
     "category": "Human Resources/Expenses",
     "license": "AGPL-3",
     "summary": "Create German meal allowances directly from a trip",
-    "version": "19.0.1.0.0",
+    "version": "19.0.1.0.1001",
     "depends": ["hr_expense_meal_allowance", "hr_expense_trip"],
     "maintainers": ["CRogos"],
     "data": [
