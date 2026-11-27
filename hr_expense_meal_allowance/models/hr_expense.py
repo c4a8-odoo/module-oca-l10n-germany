@@ -9,8 +9,8 @@ from odoo.tools.safe_eval import time as safe_eval_time
 class HrExpense(models.Model):
     _inherit = "hr.expense"
 
-    travel_begin = fields.Datetime()
-    travel_end = fields.Datetime()
+    travel_begin = fields.Datetime(tracking=True)
+    travel_end = fields.Datetime(tracking=True)
     customer_id = fields.Many2one("res.partner")
     meal_allowance_rate_id = fields.Many2one(
         "hr.expense.meal.allowance.rate",
